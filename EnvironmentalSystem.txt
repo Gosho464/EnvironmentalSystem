@@ -1,0 +1,47 @@
+// C++ code
+//
+#include <Adafruit_LiquidCrystal.h>
+
+int temp = 0;
+
+Adafruit_LiquidCrystal lcd_1(0);
+
+void setup()
+{
+  lcd_1.begin(16, 2);
+  pinMode(A0, INPUT);
+  pinMode(A1, OUTPUT);
+  pinMode(13, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(A2, INPUT);
+  pinMode(A3, INPUT);
+  Serial.begin(9600);
+  pinMode(10, OUTPUT);
+
+  lcd_1.print((-40 + 0.488155 * (analogRead(A0) - 20)));
+  digitalWrite(A1, HIGH);
+  digitalWrite(13, LOW);
+}
+
+void loop()
+{
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(1000); // Wait for 1000 millisecond(s)
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(1000); // Wait for 1000 millisecond(s)
+  lcd_1.clear();
+  lcd_1.print("temp: ");
+  lcd_1.print((-40 + 0.488155 * (analogRead(A0) - 20)));
+  lcd_1.setCursor(0, 1);
+  lcd_1.print("moisture: ");
+  lcd_1.print(analogRead(A2));
+
+  Serial.println(analogRead(A3));
+  if (analogRead(A3) >= 150) {
+    digitalWrite(13, HIGH);
+    digitalWrite(10, HIGH);
+  } else {
+    digitalWrite(13, LOW);
+    digitalWrite(10, LOW);
+  }
+}
